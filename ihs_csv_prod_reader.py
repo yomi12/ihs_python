@@ -84,9 +84,13 @@ for line in lines:
         uid = ""
         wellstat = ""
         res_name = ""
+        entid = ""
+        multi_well = True
         # count non-MULTI well
         if not line.split(",")[1].__contains__("MULTI"):
             non_multi += 1
+            entid = line.split(",")[1]
+            multi_well = not multi_well
     # set reservoir name
     if codes["Name Record 2"] in line:
         res_name = line.split(",")[5]
@@ -97,12 +101,12 @@ for line in lines:
         if wellstat == WellStatus.ACTIVE:
             num_wells_active += 1
     # set well header name, and coordinates
-    if codes["Lat/Long Record"] in line and wellstat == WellStatus.ACTIVE:
-        fout2.write(','.join(map(str, uid.split() + line.split(',')[1:3])) + "," + res_name.strip() + "\n")
+    if codes["Lat/Long Record"] in line and wellstat == WellStatus.ACTIVE and not multi_well:
+        fout2.write(','.join(map(str, entid.split() + uid.split() + line.split(',')[1:3])) + "," + res_name.strip() + "\n")
     # add uid to monthly production record
-    if codes["Monthly Production"] in line and len(uid) > 0 and wellstat == WellStatus.ACTIVE:
+    if codes["Monthly Production"] in line and not multi_well and wellstat == WellStatus.ACTIVE:
         # temp -- line.split(",")[0] ==
-        fout.write(','.join(map(str, uid.split() + line.split(',')[1:8])))
+        fout.write(','.join(map(str, entid.split() + line.split(',')[1:8])))
 
 # closing file for writing
 fout.close()
