@@ -1,10 +1,8 @@
 import os
-# import time
 from datetime import datetime
-from enum import Enum
 
 class WellStatus(object):
-    ACTIVE   = 'A'
+    ACTIVE = 'A'
     INACTIVE = 'I'
 
 # function to determine total num of wells in list
@@ -16,7 +14,7 @@ def numofwells(lines):
     return i
 
 # Current directory
-dircurd = os.getcwd()
+curdir = os.getcwd()
 
 # Change directory
 os.chdir("C:/Users/Dario/Documents/IHS")
@@ -25,21 +23,18 @@ print("-------------------------------------------------------------------------
 start_dt = datetime.now()
 print("starting ...")
 
-# Opening file
+# open production ihs export file for read-only
 fname = "Atascosa - 298 Production CSV.98c"
-#fname = "LOUISIANA - 298 Production.98c"
-#fname = "HAYNESVILLE - 298 Production.98c"
-
 fo = open(fname, "r")
-print("  opening file (reading): ", fo.name)
+print("  opening file (input): ", fo.name)
 
-# reading entire file
-print("  reading file ...")
+# read production ihs export file
+print("    reading file ...")
 lines = fo.readlines()
-print("  number of lines: ", len(lines))
+print("    number of read lines: ", len(lines))
 
-# Closing file
-print("  closing file ...")
+# close production ihs export file
+print("  closing file (input) ...")
 fo.close()
 
 # dictionary with 298 Production Export codes
@@ -67,49 +62,46 @@ codes = {
     "End Record Label": "END_US_PROD"
 }
 
-# print only selected coded lines
+# to store num_wells, non_multi wells, and active wells
 num_wells = 0
 non_multi = 0
 num_wells_active = 0
 
+# creates production ihs export file for writing
 fout = open("Atascosa - 298 Production output.csv", "w")
-#fout = open("LOUISIANA - 298 Production output.csv", "w")
-#fout = open("HAYNESVILLE - 298 Production output.csv", "w")
-
 print("  opening file (production): ", fout.name)
 
-#fout2 = open("HAYNESVILLE - 298 Header output.csv", "w")
+# creates header ihs export file for writing
 fout2 = open("Atascosa - 298 Header output.csv", "w")
 print("  opening file (header):", fout2.name)
 
-
 for line in lines:
-    # If new well count it -- uid is initialized
+    # if new well found -- uid is initialized
+    # increment num_wells
+    # initialize uid, wellstat, res_name
     if codes["Start Record Label"] in line:
         num_wells += 1
         uid = ""
-        WellStat = ""
+        wellstat = ""
         res_name = ""
-
-        # count non-MULTI well -- convert uid to list
+        # count non-MULTI well
         if not line.split(",")[1].__contains__("MULTI"):
             non_multi += 1
-            uid = line.split(",")[1]
-    # set (write) reservoir name on header
+    # set reservoir name
     if codes["Name Record 2"] in line:
         res_name = line.split(",")[5]
-    # set Well Status
+    # set uid -- active well indicator
     if codes["Well Record"] in line:
-        WellStat = line.split(",")[9].strip('"')
-        if WellStat == WellStatus.ACTIVE:
+        uid = line.split(",")[1]
+        wellstat = line.split(",")[9].strip('"')
+        if wellstat == WellStatus.ACTIVE:
             num_wells_active += 1
-    # set (write) well header name, and coordinates
-    if codes["Lat/Long Record"] in line:
-        #  and WellStat == WellStatus.ACTIVE
+    # set well header name, and coordinates
+    if codes["Lat/Long Record"] in line and wellstat == WellStatus.ACTIVE:
         fout2.write(','.join(map(str, uid.split() + line.split(',')[1:3])) + "," + res_name.strip() + "\n")
     # add uid to monthly production record
-    if line.split(",")[0] == codes["Monthly Production"] and len(uid) > 0:
-        # and WellStat == WellStatus.ACTIVE
+    if codes["Monthly Production"] in line and len(uid) > 0 and wellstat == WellStatus.ACTIVE:
+        # temp -- line.split(",")[0] ==
         fout.write(','.join(map(str, uid.split() + line.split(',')[1:8])))
 
 # closing file for writing
