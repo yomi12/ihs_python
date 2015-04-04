@@ -104,7 +104,7 @@ for line in lines:
     if codes["Lat/Long Record"] in line and wellstat == WellStatus.ACTIVE and not multi_well:
         fout2.write(','.join(map(str, entid.split() + uid.split() + line.split(',')[1:3])) + "," + res_name.strip() + "\n")
     # add uid to monthly production record
-    if codes["Monthly Production"] in line and not multi_well and wellstat == WellStatus.ACTIVE:
+    if codes["Monthly Production"] in line and wellstat == WellStatus.ACTIVE and not multi_well:
         # temp -- line.split(",")[0] ==
         fout.write(','.join(map(str, entid.split() + line.split(',')[1:8])))
 
