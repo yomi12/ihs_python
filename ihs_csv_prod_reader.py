@@ -82,35 +82,53 @@ for line in lines:
     if codes["Start Record Label"] in line:
         num_wells += 1
         uid = ""
-        wellstat = ""
+        temp = ""
+        wellstatus = ""
+        reservoir = ""
         res_name = ""
-        entid = ""
         multi_well = True
+        state = ""
+        county = ""
+        api = ""
+        lease = ""
         # count non-MULTI well
         if not line.split(",")[1].__contains__("MULTI"):
             non_multi += 1
-            entid = line.split(",")[1]
             multi_well = not multi_well
+    # set state, county
+    if codes["Entity Record"] in line:
+        state = line.split(",")[2]
+        county = line.split(",")[4]
+    # set api, lease, reservoir code
+    if codes["Regulatory Record"] in line:
+        api = line.split(",")[7]
+        lease = line.split(",")[1]
+        reservoir = line.split(",")[5]
+        uid = state.strip('"') + county.strip('"') + api.strip('"') + lease.strip('"') + reservoir.strip('"')
     # set reservoir name
     if codes["Name Record 2"] in line:
         res_name = line.split(",")[5]
-    # set uid -- active well indicator
+    # set and count active well indicator
     if codes["Well Record"] in line:
-        uid = line.split(",")[1]
-        wellstat = line.split(",")[9].strip('"')
-        if wellstat == WellStatus.ACTIVE:
+        wellstatus = line.split(",")[9].strip('"')
+        if wellstatus == WellStatus.ACTIVE:
             num_wells_active += 1
     # set well header name, and coordinates
-    if codes["Lat/Long Record"] in line and wellstat == WellStatus.ACTIVE and not multi_well:
-        fout2.write(','.join(map(str, entid.split() + uid.split() + line.split(',')[1:3])) + "," + res_name.strip() + "\n")
+    if codes["Lat/Long Record"] in line and wellstatus == WellStatus.ACTIVE and not multi_well:
+        temp = (uid.split() + line.split(',')[1:3])
+        temp.insert(len(temp), res_name)
+        fout2.write(','.join(temp))
     # add uid to monthly production record
-    if codes["Monthly Production"] in line and wellstat == WellStatus.ACTIVE and not multi_well:
-        # temp -- line.split(",")[0] ==
-        fout.write(','.join(map(str, entid.split() + line.split(',')[1:8])))
+    if codes["Monthly Production"] in line and wellstatus == WellStatus.ACTIVE and not multi_well:
+        temp = (uid.split() + line.split(',')[1:3])
+        t = line.split(',')[1:8]
+        temp.extend(t)
+        fout.write(','.join(temp))
 
 # closing file for writing
 fout.close()
 fout2.close()
+
 print("  closing file (header) ...")
 print("  closing file (production) ...")
 
