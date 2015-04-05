@@ -5,14 +5,6 @@ class WellStatus(object):
     ACTIVE = 'A'
     INACTIVE = 'I'
 
-# function to determine total num of wells in list
-def numofwells(lines):
-    i = 0
-    for line in lines:
-        if codes["Start Record Label"] in line:
-            i += 1
-    return i
-
 # Current directory
 curdir = os.getcwd()
 
@@ -120,9 +112,7 @@ for line in lines:
         fout2.write(','.join(temp))
     # add uid to monthly production record
     if codes["Monthly Production"] in line and wellstatus == WellStatus.ACTIVE and not multi_well:
-        temp = (uid.split() + line.split(',')[1:3])
-        t = line.split(',')[1:8]
-        temp.extend(t)
+        temp = (uid.split() + line.split(',')[1:8])
         fout.write(','.join(temp))
 
 # closing file for writing
