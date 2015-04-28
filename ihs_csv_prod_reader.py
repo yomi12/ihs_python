@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 
+
 class WellStatus(object):
     ACTIVE = '"A"'
     INACTIVE = '"I"'
@@ -35,16 +36,14 @@ codes = {
 curdir = os.getcwd()
 
 # Change directory
-os.chdir("C:/Users/Dario/Documents/IHS")
+os.chdir("C:/Users/Dario/Documents/IHS/NIOBRARA")
 
 print("----------------------------------------------------------------------------------------------------")
 start_dt = datetime.now()
 print("starting ...")
 
 # open production ihs export file for read-only
-# fname = "Atascosa - 298 Production CSV.98c"
-# "HAYNESVILLE - 298 Production.98c"
-finput = open("Atascosa - 298 Production CSV.98c", "r")
+finput = open("NIOBRARA298Production.98c", "r")
 
 # read production ihs export file
 lines = finput.readlines()
@@ -58,19 +57,19 @@ num_wells = 0
 non_multi = 0
 num_wells_active = 0
 
-# creates header ihs-export output file
+# creates header csv output file
 fout_head = open("298fHeaderOutput.csv", "w")
 print("  opening file (header):", fout_head.name)
 fout_head.write('"id", "uid", "uid_source", "region_code", "state_code", "field_code", "county_parish_code", '
                 '"county_parish_name", "operator_code", "primary_prod_code", "mode", "formation_code", '
                 '"res_code", "surf_lat", "surf_lon"\n')
 
-# creates production ihs-export output file
+# creates production csv output file
 fout_prod = open("298fProductionOutput.csv", "w")
 print("  opening file (production): ", fout_prod.name)
 fout_prod.write('"id", "pdate", "liquid_bbl", "gas_mcf", "water_bbl", "allowable", "nwells", "dop"\n')
 
-# creates test ihs-export output file
+# creates production test csv output file
 fout_test = open("298fTestOutput.csv", "w")
 print("  opening file (test): ", fout_test.name)
 fout_test.write('"id", "testNumber", "testDate", "upperPerfDepth", "lowerPerfDepth", "liquidsPerDay", '
@@ -143,7 +142,6 @@ if lines[0].split()[7] == "COMMA":
         if codes["Name Record 2"] in line:
             token = line.split(',')
             field_name = token[1]
-            # +C ,"LONGWOOD",,,,""
             # set reservoir name
             reservoir_name = token[5].strip('\n')
         if codes["Well Record"] in line:
