@@ -36,14 +36,14 @@ codes = {
 curdir = os.getcwd()
 
 # Change directory
-os.chdir("C:/Users/Dario/Documents/IHS/NIOBRARA")
+os.chdir("C:/Users/Dario/Documents/IHS/UTICA")
 
 print("----------------------------------------------------------------------------------------------------")
 start_dt = datetime.now()
 print("starting ...")
 
 # open production ihs export file for read-only
-finput = open("NIOBRARA298Production.98c", "r")
+finput = open("UTICA298Production.98c", "r")
 
 # read production ihs export file
 lines = finput.readlines()
