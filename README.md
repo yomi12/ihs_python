@@ -1,17 +1,29 @@
 # ihs_python
+## Objective
+
 Site to share python code to read comma separated production history export files originated from IHS database.
 
+## Strucutre of Files
+
 The program xxxxx.py creates three (3) comma separated files:
-- Header file with general information and geographical coordinates of the wells.
-- Monthly Production history for wells contained in the header file.
-- Production Tests for wells.
+* Header file (**298fHeaderOutput.csv**) with general information and geographical coordinates of the wells.
+    + Attributes of the file:
+        - "id", "uid", "uid_source"
+* Monthly Production history file (**298fProductionOutput.csv**).
+    + Attributes of the file:
+        - "id", "pdate", "liquid_bbl", "gas_mcf", "water_bbl"
+* Production Tests file (**298fTestOutput.csv**).
+    + Attributes of the file:
+        - "id", "testNumber", "testDate", "upperPerfDepth", "lowerPerfDepth"
 
 Those files are created in such a way that their format can be easily uploaded to any relational database.
 
-The purpose of this exercise is two fold:
+## Purpose of the programming in Python
 
-1 - Learn Python by doing some coding
-2 - Use the files produced by the python programs in some analysis using R
+The purpose of this exercise is twofold:
+
+1. Learn Python by doing some coding
+2. Use the files produced by the python programs in some analysis using R
 
 Final purpose of all this practice is to be able to identify some trends, common patterns, correlations and posibly some causation of what could be the performance signature of a group of wells.
 
