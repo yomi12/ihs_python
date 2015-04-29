@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 
-
 class WellStatus(object):
     ACTIVE = '"A"'
     INACTIVE = '"I"'
@@ -32,18 +31,12 @@ codes = {
     "End Record Label": "END_US_PROD"
 }
 
-# Current directory
-curdir = os.getcwd()
-
-# Change directory
-os.chdir("C:/Users/Dario/Documents/IHS/UTICA")
-
 print("----------------------------------------------------------------------------------------------------")
 start_dt = datetime.now()
 print("starting ...")
 
-# open production ihs export file for read-only
-finput = open("UTICA298Production.98c", "r")
+# open production ihs export file for read-only - fixed-name file 298fProduction.98c
+finput = open("../../../Users/Dario/Documents/IHS/298fProduction.98c", "r")
 
 # read production ihs export file
 lines = finput.readlines()
@@ -60,9 +53,9 @@ num_wells_active = 0
 # creates header csv output file
 fout_head = open("298fHeaderOutput.csv", "w")
 print("  opening file (header):", fout_head.name)
-fout_head.write('"id", "uid", "uid_source", "region_code", "state_code", "field_code", "county_parish_code", '
-                '"county_parish_name", "operator_code", "primary_prod_code", "mode", "formation_code", '
-                '"res_code", "surf_lat", "surf_lon"\n')
+fout_head.write('"id", "uid", "uid_source", "well_name", "region_code", "state_code", "field_code", '
+                '"county_parish_code", "county_parish_name", "operator_code", "primary_prod_code", '
+                '"mode", "formation_code", "res_code", "surf_lat", "surf_lon"\n')
 
 # creates production csv output file
 fout_prod = open("298fProductionOutput.csv", "w")
