@@ -53,22 +53,22 @@ num_wells_active = 0
 # creates header csv output file
 fout_head = open("298fHeaderOutput.csv", "w")
 print("  opening file (header):", fout_head.name)
-fout_head.write('"id", "uid", "uid_source", "well_name", "region_code", "state_code", "field_code", '
-                '"county_parish_code", "county_parish_name", "operator_code", "primary_prod_code", '
-                '"mode", "formation_code", "res_code", "surf_lat", "surf_lon"\n')
+fout_head.write('id, uid, uid_source, well_name, region_code, state_code, field_code, '
+                'county_parish_code, county_parish_name, operator_code, primary_prod_code, '
+                'mode, formation_code, res_code, surf_lat, surf_lon\n')
 
 # creates production csv output file
 fout_prod = open("298fProductionOutput.csv", "w")
 print("  opening file (production): ", fout_prod.name)
-fout_prod.write('"id", "pdate", "liquid_bbl", "gas_mcf", "water_bbl", "allowable", "nwells", "dop"\n')
+fout_prod.write('id, pdate, liquid_bbl, gas_mcf, water_bbl, allowable, nwells, dop\n')
 
 # creates production test csv output file
 fout_test = open("298fTestOutput.csv", "w")
 print("  opening file (test): ", fout_test.name)
-fout_test.write('"id", "testNumber", "testDate", "upperPerfDepth", "lowerPerfDepth", "liquidsPerDay", '
-                '"gasPerDay", "waterPerDay", "chokeSize", "bsw", "ftp", "gor", "liquidGravity", '
-                '"finalSIP", "gasGravity", "prodMethod", "bhpOverZ", "zFactor", "nFactor", "calcAOF", '
-                '"cumGas","clp"\n')
+fout_test.write('id, testNumber, testDate, upperPerfDepth, lowerPerfDepth, liquidsPerDay, '
+                'gasPerDay, waterPerDay, chokeSize, bsw, ftp, gor, liquidGravity, '
+                'finalSIP, gasGravity, prodMethod, bhpOverZ, zFactor, nFactor, calcAOF, '
+                'cumGas,clp\n')
 
 if lines[0].split()[7] == "COMMA":
     for line in lines:
