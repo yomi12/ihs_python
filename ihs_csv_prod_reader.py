@@ -71,6 +71,7 @@ fout_test.write('id, testNumber, testDate, upperPerfDepth, lowerPerfDepth, liqui
                 'cumGas,clp\n')
 
 if lines[0].split()[7] == "COMMA":
+    tinfo = 0
     for line in lines:
         # if new well found -- uid is initialized
         # increment num_wells
@@ -165,9 +166,17 @@ if lines[0].split()[7] == "COMMA":
             token[len(token) - 1] = token[len(token) - 1].strip('\n')
             plist = [str(token[1]), str(token[15])]
             t1 = ','.join(map(str, token[2:15]))  # t1 has 13 members
+            tinfo += 1
+            print('Test Info 1 - API: {0} - Test: {1}'.format(api_number.strip('"'), tinfo))
+            print('t1: ' + t1)
+            print('--------------------------------------------------------------------------------')
         if codes["Test Information Record 2"] in line:
             token = line.split(',')
             t2 = ','.join(map(str, token[2:len(token)]))  # t2 has 7 members
+            tinfo += 1
+            print('Test Info 2 - API: {0} - Test: {1}'.format(api_number.strip('"'), tinfo))
+            print('t2: ' + t2)
+            print('--------------------------------------------------------------------------------')
             id_unique = '"' + ("{0}{1}".format(api_number.strip('"'), lease_unit_code.strip('"'))) + '"'
             fout_test.write(id_unique + ',' + ','.join(map(str, plist)) + ',' + t1 + ',' + t2)
         if codes["Cumulative Production"] in line:
